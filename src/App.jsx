@@ -1,4 +1,4 @@
-import { createResource, createSignal } from 'solid-js';
+import { createEffect, createResource, createSignal } from 'solid-js';
 import './App.css';
 
 export function App() {
@@ -9,6 +9,10 @@ export function App() {
   function handleInput(e) {
     setUserId(e.currentTarget.value);
   }
+
+  createEffect(() => {
+    console.log("The count is now", user());
+  });
 
   return (
     <>

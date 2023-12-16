@@ -1,35 +1,26 @@
-import { createSignal } from 'solid-js'
-import solidLogo from './assets/solid.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createResource, createSignal } from 'solid-js';
+import './App.css';
 
-function App() {
-  const [count, setCount] = createSignal(0)
+export function App() {
+  const [count, setCount] = createSignal(0);
+  const [userId, setUserId] = createSignal();
+  const [user] = createResource(userId, fetchUser);
+
+  function handleInput(e) {
+    setUserId(e.currentTarget.value);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={solidLogo} class="logo solid" alt="Solid logo" />
-        </a>
-      </div>
-      <h1>Vite + Solid</h1>
-      <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count()}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p class="read-the-docs">
-        Click on the Vite and Solid logos to learn more
-      </p>
+      <h1>Hello World</h1>
+      <button onClick={() => setCount((count) => count + 1)}>
+        count is {count()}
+      </button>
+      <input type="number" onInput={handleInput} />
+      {user.state === 'ready' ? <p>User name: {user().name}</p> : null}
     </>
   )
 }
 
-export default App
+const fetchUser = async (id) =>
+  (await fetch(`https://swapi.dev/api/people/${id}/`)).json();
